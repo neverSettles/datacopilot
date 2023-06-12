@@ -1,26 +1,27 @@
 import openai
 import os
 from typing import List
-import langchain
 import csv
+from dotenv import load_dotenv
 
+load_dotenv()
 # Set up your OpenAI API credentials
 key = os.getenv("OPENAI_API_KEY")
 openai.api_key = key
 
-def call_openai_api(system_prompt, user_prompt):
+def call_openai_api(prompt):
     # Define the parameters for the completion
+    params = {
+        'model': 'text-davinci-003',  # The model you want to use
+        'prompt': prompt,
+        'max_tokens': 3000  # The maximum number of tokens to generate
+    }
 
-    response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    max_tokens=3000,
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_prompt}
-    ])
+    # Call the OpenAI API
+    response = openai.Completion.create(**params)
 
     # Retrieve the generated text from the API response
-    generated_text = response.choices[0].message.content.strip()
+    generated_text = response.choices[0].text.strip()
 
     return generated_text
 
@@ -31,6 +32,13 @@ def execute_python_code(code):
     except Exception as e:
         return f"Execution failed: {str(e)}"
 
+def read_csv_file(filename):
+    data = []
+    with open(filename, 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            data.append(row)
+    return data
 
 def read_csv_first_n_lines(file_path: str, n: int) -> List[str]:
     lines: List[str] = []
@@ -42,30 +50,47 @@ def read_csv_first_n_lines(file_path: str, n: int) -> List[str]:
 # Example usage
 csv_path = 'data/chats.csv'
 n_lines = 10
-raw = read_csv_first_n_lines(csv_path, n_lines)
+raw = read_csv_file(csv_path)
+
+
+printed_raw = '\n'.join(map(str, raw[:5]))
 
 question = "Who are the most active users"
 
-sys_prompt = """
-My data looks like this:
+prompt = """
+The first {n} rows of my data look like:
+START_DATA
 {raw}
+END_DATA
+There are {row_count} rows in the csv in total. So take that into consideration when plotting any images.
 
-Write some python code with pandas to transform the data such that it answers the user's question.
-The code should create the file if the file does not exist.
-Make it only output runnable python code.
-The code should create the file in the './output/' folder.
-Give me only pyton code and nothing else. I will run the output of what you reply.
-""".format(raw=str(raw))
+The data is stored in {csv_path}
 
-user_prompt = """
-My question is:
+You are Jeff Dean. 
+Write some python code with pandas to transform the data such that it answers the following question:
 {question}
-""".format(question=question)
+After the transformation of the data is done, the code should create the most relelvant matplotlib plot and save it to a file in output/imgs2/
+The code should create an output csv file if the file does not exist.
+Make sure the python code is always correct and runnable. Make sure the code is efficient.
+The code should create the file in the './output/' folder.
+The code should import all necessary libraries.
+""".format(n=n_lines, raw=printed_raw, row_count=len(raw), csv_path=csv_path, question=question)
 
-print(sys_prompt,user_prompt,'\n')
-openai_response = call_openai_api(sys_prompt, user_prompt)
-print(openai_response)
+def execute_continuously(prompt):
+    print(prompt)
+    openai_response = call_openai_api(prompt)
+    print(openai_response)
+    execution_result = execute_python_code(openai_response)
+    while 'failed' in execution_result:
+        print(execution_result)
+        print('retrying')
+        openai_response = call_openai_api(prompt)
+        print(openai_response)
+        execution_result = execute_python_code(openai_response)
 
-# Example usage
-execution_result = execute_python_code(openai_response)
-print(execution_result)
+
+execute_continuously(prompt)
+execute_continuously(prompt)
+execute_continuously(prompt)
+execute_continuously(prompt)
+execute_continuously(prompt)
