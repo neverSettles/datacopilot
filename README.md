@@ -11,8 +11,8 @@ save the file.
 ## Setup virtual environment
 
 ```
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv copilotenv
+source copilotenv/bin/activate
 pip install -r requirements.txt
 ```
 
