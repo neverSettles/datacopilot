@@ -3,7 +3,10 @@
 Run the following:
 
 ## Setup API key
-`export OPENAI_API_KEY=YOURKEYHERE`
+Create a file named .env in the root of this repository 
+On the first line, put: 
+```OPENAI_API_KEY=YOURKEYHERE```
+save the file.
 
 ## Setup virtual environment
 
