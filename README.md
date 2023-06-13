@@ -19,6 +19,10 @@ source copilotenv/bin/activate
 pip install -r requirements.txt
 ```
 
+Download the kaggle dataset:
+https://www.kaggle.com/datasets/yasserh/instacart-online-grocery-basket-analysis-dataset
+and unzip the files into the './data/instacart/' directory.
+
 ## Run the code
 ```
 python datacopilot.py
