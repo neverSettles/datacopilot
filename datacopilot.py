@@ -55,7 +55,7 @@ def read_csv_first_n_lines(file_path: str, n: int) -> List[str]:
     return lines
 
 # Example usage
-csv_path = './data/instacart/order_products__prior.csv'
+csv_path = './data/grocery/order_products__prior.csv'
 n_lines = 5
 raw = read_csv_first_n_lines(csv_path, n_lines)
 file_length = get_file_num_lines(csv_path)
@@ -91,27 +91,12 @@ def execute_continuously(prompt):
         print('retrying')
         execution_result = execute_prompt(prompt)
 
+e2e_prompt = open("prompt_templates/e2e.prompt").read()
 iterations = 2
 for i in range(iterations):
     with shelve.open('localdb') as db:
         idx = db['file_count']
         db['file_count'] += 1
-    prompt = """
-The first {n} rows of my data look like:
-START_DATA
-{raw}
-END_DATA
-There are {row_count} rows in the csv in total. So take that into consideration when plotting any images.
-
-The data is stored in '{csv_path}'
-
-You are Jeff Dean. 
-Write some python code with pandas to transform the data such that it answers the following question:
-{question}
-After the transformation of the data is done,
-The code should create the most relelvant matplotlib plot and save it to a file in the folder './output/exp{idx}/'.
-Make sure the python code is always correct and runnable. Make sure the code is efficient.
-The code should import all necessary libraries.
-    """.format(n=n_lines, raw=printed_raw, row_count=file_length, csv_path=csv_path, question=question, idx=idx)
+    prompt = e2e_prompt.format(n=n_lines, raw=printed_raw, row_count=file_length, csv_path=csv_path, question=question, idx=idx)
 
     execute_continuously(prompt)
