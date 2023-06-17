@@ -88,7 +88,7 @@ printed_raw = ''.join(map(str, raw[:n_lines]))
 question = "What product is ordered most often?"
 
 e2e_prompt = open("prompt_templates/e2e.prompt").read()
-iterations = 2
+iterations = 1
 for i in range(iterations):
     with shelve.open('localdb') as db:
         idx = db['file_count']
