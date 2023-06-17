@@ -11,12 +11,10 @@ On the first line, put:
 
 save the file.
 
-## Setup virtual environment
+## Setup virtual environment, install requirements via setup_env.sh script:
 
 ```
-python3 -m venv copilotenv
-source copilotenv/bin/activate
-pip install -r requirements.txt
+source setup_env.sh
 ```
 
 Download the kaggle dataset:
