@@ -17,9 +17,9 @@ save the file.
 source setup_env.sh
 ```
 
-Download the kaggle dataset:
+The repo uses a sampled version of the dataset. To Download the full kaggle dataset, go to:
 https://www.kaggle.com/datasets/yasserh/instacart-online-grocery-basket-analysis-dataset
-and unzip the files into the './data/instacart/' directory.
+and unzip the files into the './data/grocery/' directory.
 
 ## Run the code
 ```
