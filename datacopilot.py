@@ -6,10 +6,9 @@ from dotenv import load_dotenv
 import shelve
 from pathlib import Path
 
-load_dotenv()
 # Set up your OpenAI API credentials
-key = os.getenv("OPENAI_API_KEY")
-openai.api_key = key
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def call_openai_api(prompt):
     # Define the parameters for the completion
@@ -54,20 +53,6 @@ def read_csv_first_n_lines(file_path: str, n: int) -> List[str]:
             lines.append(csv_file.readline())
     return lines
 
-# Example usage
-csv_path = './data/grocery/order_products__prior.csv'
-n_lines = 5
-raw = read_csv_first_n_lines(csv_path, n_lines)
-file_length = get_file_num_lines(csv_path)
-
-with shelve.open('localdb') as db:
-    if 'file_count' not in db:
-        db['file_count'] = 1
-    idx = db['file_count']
-printed_raw = ''.join(map(str, raw[:n_lines]))
-
-question = "What product is ordered most often?"
-
 def execute_prompt(prompt):
     openai_response = call_openai_api(prompt)
     print(openai_response)
@@ -82,14 +67,25 @@ def execute_prompt(prompt):
 def execute_continuously(prompt):
     print(prompt)
     Path(f"./output/exp{idx}/").mkdir(parents=True, exist_ok=True)
-
-    
-
     execution_result = execute_prompt(prompt)
     while 'failed' in execution_result:
         print(execution_result)
         print('retrying')
         execution_result = execute_prompt(prompt)
+
+# Example usage
+csv_path = './data/grocery/order_products__prior.csv'
+n_lines = 5
+raw = read_csv_first_n_lines(csv_path, n_lines)
+file_length = get_file_num_lines(csv_path)
+
+with shelve.open('localdb') as db:
+    if 'file_count' not in db:
+        db['file_count'] = 1
+    idx = db['file_count']
+printed_raw = ''.join(map(str, raw[:n_lines]))
+
+question = "What product is ordered most often?"
 
 e2e_prompt = open("prompt_templates/e2e.prompt").read()
 iterations = 2
