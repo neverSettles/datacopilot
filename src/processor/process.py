@@ -1,7 +1,5 @@
 import openai
-import os
 from typing import List
-import csv
 import shelve
 from pathlib import Path
 import matplotlib
@@ -30,14 +28,6 @@ def execute_python_code(code):
     except Exception as e:
         return f"Execution failed: {str(e)}"
 
-def read_csv_file(filename):
-    data = []
-    with open(filename, 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            data.append(row)
-    return data
-
 def get_file_num_lines(file_path: str) -> int:
     with open(file_path, "rb") as f:
         num_lines = sum(1 for _ in f)
@@ -46,7 +36,7 @@ def get_file_num_lines(file_path: str) -> int:
 def read_csv_first_n_lines(file_path: str, n: int) -> List[str]:
     lines: List[str] = []
     with open(file_path, 'r') as csv_file:
-        for line in range(n):
+        for _ in range(n):
             lines.append(csv_file.readline())
     return lines
 
@@ -71,27 +61,31 @@ def execute_continuously(prompt, idx):
         execution_result = execute_prompt(prompt, idx)
 
 
-def execute():
-    # Example usage
-    csv_path = './data/grocery/order_products__prior.csv'
-    n_lines = 5
+def execute(question:str, csv_files: List[str], uuid: str):
+    n_lines = 2
+    csv_path = csv_files[0]
+    
     raw = read_csv_first_n_lines(csv_path, n_lines)
     file_length = get_file_num_lines(csv_path)
 
+    printed_raw = ''.join(map(str, raw[:n_lines]))
+
+    e2e_prompt = open("prompt_templates/e2e.prompt").read()
+    prompt = e2e_prompt.format(n=n_lines, raw=printed_raw, row_count=file_length, csv_path=csv_path, question=question, idx=uuid)
+
+    execute_continuously(prompt, uuid)
+
+if __name__ == '__main__':
     with shelve.open('localdb') as db:
         if 'file_count' not in db:
             db['file_count'] = 1
         idx = db['file_count']
-    printed_raw = ''.join(map(str, raw[:n_lines]))
-
-    question = "What product is ordered most often?"
-
-    e2e_prompt = open("prompt_templates/e2e.prompt").read()
-    iterations = 1
-    for i in range(iterations):
-        with shelve.open('localdb') as db:
-            idx = db['file_count']
-            db['file_count'] += 1
-        prompt = e2e_prompt.format(n=n_lines, raw=printed_raw, row_count=file_length, csv_path=csv_path, question=question, idx=idx)
-
-        execute_continuously(prompt, idx)
+        db['file_count'] += 1
+    
+    execute(
+        question="What product is ordered most often?",
+        csv_files=[
+            './data/grocery/order_products__prior.csv'
+        ],
+        uuid=idx
+    )
