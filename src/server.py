@@ -1,8 +1,8 @@
 import openai
 import os
+import json
 
-
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 
 from processor import process
@@ -19,18 +19,24 @@ app = Flask(__name__)
 def index():
     return jsonify({"Choo Choo": "Navigate to /suggest to get outputs! 🚅"})
 
-@app.route('/suggest')
+@app.route('/suggest', methods=['POST'])
 def suggest():
+    content_type = request.headers.get('Content-Type')
+    if (content_type != 'application/json'):
+        return 'Content-Type not supported!'
+
+    body = json.loads(request.json)
     # body = {
-    #     'goal': 'What are the best colors?',
-    #     'request_uuid': '12345'
+    #     'objective': 'What are the best colors?',
+    #     'requestId': '12345'
     # }
-    # # get all csv files from aws, save them locally.
-    # csv_files = handler.download_csvs_from_s3(body.request_uuid)
+
+    # get all csv files from aws, save them locally.
+    # csv_files = handler.download_csvs_from_s3(body.requestId)
 
     # # execute
-    # process.execute(body.goal, csv_files, body.request_uuid)
-    return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
+    # process.execute(body.objective, csv_files, body.requestId)
+    return jsonify({f"Choo Choo": "Hello krishna {body}".format(body=body)})
 
 
 
