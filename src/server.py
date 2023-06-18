@@ -19,7 +19,7 @@ app = Flask(__name__)
 def index():
     return jsonify({"Choo Choo": "Navigate to /suggest to get outputs! 🚅"})
 
-@app.route('/suggest', methods=['POST'])
+@app.route('/suggest', methods=['GET', 'POST'])
 def suggest():
     content_type = request.headers.get('Content-Type')
     if (content_type != 'application/json'):
