@@ -21,7 +21,7 @@ The repo uses a sampled version of the dataset. To Download the full kaggle data
 https://www.kaggle.com/datasets/yasserh/instacart-online-grocery-basket-analysis-dataset
 and unzip the files into the './data/grocery/' directory.
 
-## Run the code
+## Run the server
 ```
-python datacopilot.py
+python src/server.py
 ```
