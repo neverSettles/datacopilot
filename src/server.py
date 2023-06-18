@@ -19,7 +19,7 @@ app = Flask(__name__)
 def index():
     return jsonify({"Choo Choo": "Navigate to /suggest to get outputs! 🚅"})
 
-@app.route('/suggest', methods=['GET', 'POST'])
+@app.route('/suggest', methods=['POST'])
 def suggest():
     content_type = request.headers.get('Content-Type')
     if (content_type != 'application/json'):
@@ -32,10 +32,10 @@ def suggest():
     # }
 
     # get all csv files from aws, save them locally.
-    # csv_files = handler.download_csvs_from_s3(body.requestId)
+    csv_files = handler.download_csvs_from_s3(body.requestId)
 
-    # # execute
-    # process.execute(body.objective, csv_files, body.requestId)
+    # execute
+    process.execute(body.objective, csv_files, body.requestId)
     return jsonify({f"Choo Choo": "Hello krishna {body}".format(body=body)})
 
 
