@@ -1,5 +1,16 @@
-from flask import Flask, jsonify
+import openai
 import os
+
+
+from flask import Flask, jsonify
+from dotenv import load_dotenv
+
+from processor import process
+
+
+# Set up your OpenAI API credentials
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
@@ -9,6 +20,7 @@ def index():
 
 @app.route('/suggest')
 def suggest():
+    process.execute()
     return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
 
 
