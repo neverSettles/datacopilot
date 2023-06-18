@@ -9,7 +9,7 @@ from processor import process
 from s3 import handler
 
 
-# Set up your OpenAI API credentials
+# Set up OpenAI API credentials
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 

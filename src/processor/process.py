@@ -1,7 +1,9 @@
 import openai
 from typing import List
 import shelve
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 import matplotlib
 matplotlib.use('Agg')
 
@@ -81,6 +83,10 @@ if __name__ == '__main__':
             db['file_count'] = 1
         idx = db['file_count']
         db['file_count'] += 1
+    
+    # Set up OpenAI API credentials
+    load_dotenv()
+    openai.api_key = os.getenv("OPENAI_API_KEY")
     
     execute(
         question="What product is ordered most often?",

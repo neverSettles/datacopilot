@@ -25,3 +25,8 @@ and unzip the files into the './data/grocery/' directory.
 ```
 python src/server.py
 ```
+
+## Run locally:
+```
+python src/processor/process.py
+```
