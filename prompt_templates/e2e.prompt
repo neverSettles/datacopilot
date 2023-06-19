@@ -10,6 +10,6 @@ You are Jeff Dean.
 Write some python code with pandas to transform the data such that it answers the following question:
 {question}
 After the transformation of the data is done,
-The code should create the most relelvant matplotlib plot, not show it, but just save it to a file in the folder './output/exp{idx}/'.
+The code should create the most relelvant matplotlib plot, not show it, but just save it to a file in the folder './output/exp{idx}/' as file name answer.png .
 Make sure the python code is always correct and runnable. Make sure the code is efficient.
 The code should import all necessary libraries.
