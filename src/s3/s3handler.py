@@ -1,11 +1,12 @@
 import os
+from typing import List, Union
 import boto3
 
 from pathlib import Path
 from botocore.exceptions import NoCredentialsError
 
 
-def upload_to_aws(bucket, s3_file, local_file):
+def upload_to_aws(bucket: str, s3_file: str, local_file: str) -> bool:
     s3 = boto3.client(service_name='s3')
 
     try:
@@ -22,7 +23,7 @@ def upload_to_aws(bucket, s3_file, local_file):
         return False
 
 
-def download_files_from_s3_folder(bucket_name, s3_folder, local_folder):
+def download_files_from_s3_folder(bucket_name: str, s3_folder: str, local_folder: str) -> Union[List[str], str]:
     s3 = boto3.client(service_name='s3')
     result = s3.list_objects(Bucket=bucket_name, Prefix=s3_folder)
 
@@ -43,11 +44,11 @@ def download_files_from_s3_folder(bucket_name, s3_folder, local_folder):
     return csv_file_names
 
 
-def upload_file_to_s3(uuid: str, local_filepath: str):
+def upload_file_to_s3(uuid: str, local_filepath: str) -> bool:
     return upload_to_aws(bucket='csvlake',  s3_file=uuid + '/' + local_filepath, local_file=local_filepath)
 
 
-def download_csvs_from_s3(uuid: str, local_directory_path: str):
+def download_csvs_from_s3(uuid: str, local_directory_path: str) -> Union[List[str], str]:
     bucket_name = 'csvlake'  # your bucket name
     s3_folder = uuid  # your folder in the bucket, ends with '/'
     local_folder = local_directory_path + uuid  # local folder where the files will be downloaded
