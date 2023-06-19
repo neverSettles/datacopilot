@@ -61,6 +61,8 @@ def execute_continuously(prompt, idx):
         print(execution_result)
         print('retrying')
         execution_result = execute_prompt(prompt, idx)
+    
+    return f'./output/exp{idx}/answer.png'
 
 
 def execute(question:str, csv_files: List[str], uuid: str):
@@ -75,7 +77,7 @@ def execute(question:str, csv_files: List[str], uuid: str):
     e2e_prompt = open("prompt_templates/e2e.prompt").read()
     prompt = e2e_prompt.format(n=n_lines, raw=printed_raw, row_count=file_length, csv_path=csv_path, question=question, idx=uuid)
 
-    execute_continuously(prompt, uuid)
+    return execute_continuously(prompt, uuid)
 
 if __name__ == '__main__':
     with shelve.open('localdb') as db:

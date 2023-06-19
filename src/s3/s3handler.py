@@ -32,20 +32,22 @@ def download_files_from_s3_folder(bucket_name: str, s3_folder: str, local_folder
         print(err)
         return err
 
-    csv_file_names = []
+    csv_file_paths = []
     for item in result['Contents']:
         file_name = os.path.basename(item['Key'])
-        csv_file_names.append(str(file_name))
-
         local_file_path = os.path.join(local_folder, file_name)
+        csv_file_paths.append(str(local_file_path))
+
         s3.download_file(Bucket=bucket_name, Key=item['Key'], Filename=local_file_path)
         print(f"Downloaded {item['Key']} from {bucket_name} to {local_file_path}")
 
-    return csv_file_names
+    return csv_file_paths
 
 
 def upload_file_to_s3(uuid: str, local_filepath: str) -> bool:
-    return upload_to_aws(bucket='csvlake',  s3_file=uuid + '/' + local_filepath, local_file=local_filepath)
+    s3_file_path = uuid + '/' + os.path.basename(local_filepath)
+    print('Attempting to upload ', local_filepath)
+    return upload_to_aws(bucket='csvlake',  s3_file=s3_file_path, local_file=local_filepath), s3_file_path
 
 
 def download_csvs_from_s3(uuid: str, local_directory_path: str) -> Union[List[str], str]:
@@ -65,5 +67,5 @@ if __name__ == '__main__':
     print('csv file names: ', file_names)
 
     local_filepath = './output/exp53/most_ordered_products.png'
-    uploaded = upload_file_to_s3(uuid=uuid, local_filepath=local_filepath)
+    uploaded, _ = upload_file_to_s3(uuid=uuid, local_filepath=local_filepath)
     print('Uploaded status: ', uploaded)
