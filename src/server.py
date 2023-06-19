@@ -1,6 +1,5 @@
 import openai
 import os
-import json
 
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
@@ -42,4 +41,4 @@ def suggest():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=os.getenv("COPILOT_PORT", default=5000))
+    app.run(debug=True, host='0.0.0.0', port=os.getenv("PORT", default=5000))
