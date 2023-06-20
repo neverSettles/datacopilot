@@ -42,7 +42,7 @@ def read_csv_first_n_lines(file_path: str, n: int) -> List[str]:
             lines.append(csv_file.readline())
     return lines
 
-def execute_prompt(prompt, idx):
+def execute_prompt(prompt, initial_code, idx):
     openai_response = call_openai_api(prompt)
     print(openai_response)
 
@@ -50,17 +50,17 @@ def execute_prompt(prompt, idx):
     with open(f'./output/exp{idx}/code.py', 'w') as code:
         code.write(openai_response)
     
-    return execute_python_code(openai_response)
+    return execute_python_code(initial_code + openai_response)
 
 
-def execute_continuously(prompt, idx):
+def execute_continuously(prompt, initial_code, idx):
     print(prompt)
     Path(f"./output/exp{idx}/").mkdir(parents=True, exist_ok=True)
-    execution_result = execute_prompt(prompt, idx)
+    execution_result = execute_prompt(prompt, initial_code, idx)
     while 'failed' in execution_result:
         print(execution_result)
         print('retrying')
-        execution_result = execute_prompt(prompt, idx)
+        execution_result = execute_prompt(prompt, initial_code, idx)
     
     return f'./output/exp{idx}/answer.png'
 
@@ -77,7 +77,37 @@ def execute(question:str, csv_files: List[str], uuid: str):
     e2e_prompt = open("prompt_templates/e2e.prompt").read()
     prompt = e2e_prompt.format(n=n_lines, raw=printed_raw, row_count=file_length, csv_path=csv_path, question=question, idx=uuid)
 
-    return execute_continuously(prompt, uuid)
+    return execute_continuously(prompt, '', uuid)
+
+def execute_mutliple(question:str, uuid: str, csv_files: List[str]):
+    files_prompt_template = open("prompt_templates/pandas_transform/files.prompt").read()
+    mutli_prompt_template = open("prompt_templates/pandas_transform/main.prompt").read()
+    base_python_template = open("prompt_templates/pandas_transform/pandas_transform.prompt").read()
+
+    files_prompt = ''
+    pandas_read_csvs_code = '''import pandas as pd
+import matplotlib.pyplot as plt
+'''
+    for csv_file in csv_files:
+        files_prompt += files_prompt_template.format(
+            file_name=csv_file,
+            n_rows=get_file_num_lines(csv_file),
+            first_two_rows=''.join(map(str, read_csv_first_n_lines(csv_file, 2)))
+        ) + '\n'
+        pandas_read_csvs_code += base_python_template.format(df_name=os.path.basename(csv_file[:-4]), csv_path=csv_file) + '\n'
+    
+    pandas_read_csvs_code += '\n# Insert transform and plotting code here\n'
+    
+
+    multi_prompt = mutli_prompt_template.format(
+        file_count=len(csv_files), 
+        files_prompt=files_prompt, 
+        base_python=pandas_read_csvs_code, 
+        question=question, 
+        idx=uuid
+    )
+
+    return execute_continuously(multi_prompt, pandas_read_csvs_code, uuid)
 
 if __name__ == '__main__':
     with shelve.open('localdb') as db:
@@ -90,10 +120,15 @@ if __name__ == '__main__':
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
-    execute(
+    execute_mutliple(
         question="What product is ordered most often?",
         csv_files=[
-            './data/grocery/order_products__prior.csv'
+            './data/grocery/order_products__prior.csv',
+            './data/grocery/orders.csv',
+            './data/grocery/aisles.csv',
+            './data/grocery/products.csv',
+            './data/grocery/departments.csv',
+            # './data/grocery/order_products__train.csv'
         ],
         uuid=idx
     )

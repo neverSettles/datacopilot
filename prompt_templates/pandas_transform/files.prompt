@@ -1,0 +1,6 @@
+```
+{file_name}
+rows: {n_rows}
+The first two rows of the file are:
+{first_two_rows}
+```

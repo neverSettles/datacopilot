@@ -1,0 +1,14 @@
+Write some python code with pandas to transform the data such that it answers the following question:
+{question}
+
+I have {file_count} csv files that you can use to answer the question to analyze. They are:
+{files_prompt}
+
+The first few lines of the code will be:
+{base_python}
+
+Figure out which dataframes contain which information you will need to answer the question, and transform the data if needed so that it can answer the question.
+The code should create the most relelvant plot, including limiting the amount of data shown if showing everything would take too much space visually. 
+The program should not show the plot, but just save it to a file in the folder './output/exp{idx}/'.
+Make sure the python code is always correct and runnable. Make sure the code is efficient.
+The code should import all necessary libraries.
