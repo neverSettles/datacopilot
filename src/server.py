@@ -33,7 +33,7 @@ def suggest():
     csv_files = s3handler.download_csvs_from_s3(uuid, './downloaded/')
 
     # execute
-    image_filename = process.execute(question=objective, csv_files=csv_files, uuid=uuid)
+    image_filename = process.execute_mutliple(question=objective, csv_files=csv_files, uuid=uuid)
     upload_suceeded, s3_path = s3handler.upload_file_to_s3(uuid=uuid, local_filepath=image_filename)
     if not upload_suceeded:
         return "", 404
