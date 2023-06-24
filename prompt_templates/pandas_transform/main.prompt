@@ -1,14 +1,21 @@
-Write some python code with pandas to transform the data such that it answers the following question:
-{question}
+Please write a Python script that utilizes the pandas library to analyze and visualize data from {file_count} CSV files. The purpose of the script is to answer the question:
+"{question}"
 
-I have {file_count} csv files that you can use to answer the question to analyze. They are:
 {files_prompt}
 
-The first few lines of the code will be:
-{base_python}
+The script should have the following structure:
 
-The program should only use the dataframes it will need to answer the question, and transform the data if needed so that it can answer the question.
-The code should create the most relelvant plot, limiting the amount of data shown if showing everything would take too much space visually. 
-The program should not show the plot, but just save it to a file in the folder './output/exp{idx}/' and name it 'answer.png'.
-Make sure the python code is always correct and runnable. Make sure the code is efficient.
-The code should import all necessary libraries. Only output runnable code.
+1. Import all necessary libraries (including Pandas and Matplotlib).
+2. Load the datasets into dataframes.
+3. Transform the data as needed, ensuring that only the relevant dataframes are used to answer the question.
+4. Create a clear, concise, and informative plot that visually represents the information needed to answer the question. To avoid clutter, especially on the x-axis, limit the number of items displayed. The plot should meet the following criteria:
+   - Choose a suitable plot type (such as line, bar, scatter, etc.) based on the data and the question.
+   - Limit the number of items shown on the x-axis to a maximum of 5-10, selecting the most relevant ones if necessary.
+   - Ensure that the image has enough spacing such that no text gets cutoff.
+   - Include meaningful labels for the x-axis and y-axis, as well as a descriptive title.
+   - Use a legend if the plot includes multiple data series.
+   - Use a color scheme that makes the data easy to read.
+5. Save the plot to a file named 'answer.png' in the directory './output/exp{idx}/'. The plot should not be displayed on the screen.
+6. Make sure the code is efficient, readable, and error-free.
+
+Please, provide the Python code to accomplish the above tasks.

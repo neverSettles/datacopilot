@@ -1,6 +1,5 @@
 ```
-{file_name}
-rows: {n_rows}
-The first two rows of the file are:
+`{file_name}` [Rows: {n_rows}]
+The columns and first row looks like this:
 {first_two_rows}
 ```

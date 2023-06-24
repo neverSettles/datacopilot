@@ -85,29 +85,23 @@ def execute_mutliple(question:str, uuid: str, csv_files: List[str]):
     base_python_template = open("prompt_templates/pandas_transform/pandas_transform.prompt").read()
 
     files_prompt = ''
-    pandas_read_csvs_code = '''import pandas as pd
-import matplotlib.pyplot as plt
-'''
+
     for csv_file in csv_files:
         files_prompt += files_prompt_template.format(
             file_name=csv_file,
             n_rows=get_file_num_lines(csv_file),
             first_two_rows=''.join(map(str, read_csv_first_n_lines(csv_file, 2)))
         ) + '\n'
-        pandas_read_csvs_code += base_python_template.format(df_name=os.path.basename(csv_file[:-4]), csv_path=csv_file) + '\n'
-    
-    pandas_read_csvs_code += '\n# Insert transform and plotting code here\n'
-    
+        
 
     multi_prompt = mutli_prompt_template.format(
         file_count=len(csv_files), 
         files_prompt=files_prompt, 
-        base_python=pandas_read_csvs_code, 
         question=question, 
         idx=uuid
     )
 
-    return execute_continuously(multi_prompt, pandas_read_csvs_code, uuid)
+    return execute_continuously(multi_prompt, '', uuid)
 
 if __name__ == '__main__':
     with shelve.open('localdb') as db:
@@ -121,7 +115,7 @@ if __name__ == '__main__':
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
     execute_mutliple(
-        question="What product is ordered most often?",
+        question="How should I build recsys for grocery store?",
         csv_files=[
             './data/grocery/order_products__prior.csv',
             './data/grocery/orders.csv',
