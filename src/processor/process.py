@@ -23,18 +23,18 @@ def call_openai_api(prompt):
 
     return generated_text
 
-# def call_openai_api(prompt):
-#     response = openai.ChatCompletion.create(
-#         model='gpt-4',
-#         messages=[{"role":"system", "content":str(prompt)}],
-#         max_tokens=100,
-#         temperature=0.7,
-#         n=1,
-#         stop=None,
-#     )
-#     completion = response.choices[0].message.content.strip()
-#     all_but_first = completion.split('\n')[1:]
-#     return '\n'.join(all_but_first)
+def call_openai_api(prompt):
+    response = openai.ChatCompletion.create(
+        model='gpt-4',
+        messages=[{"role":"system", "content":str(prompt)}],
+        max_tokens=100,
+        temperature=0.7,
+        n=1,
+        stop=None,
+    )
+    completion = response.choices[0].message.content.strip()
+    all_but_first = completion.split('\n')[1:]
+    return '\n'.join(all_but_first)
 
 def execute_python_code(code):
     try:
@@ -116,19 +116,19 @@ def execute_mutliple(question:str, uuid: str, csv_files: List[str]):
 
     return execute_continuously(multi_prompt, '', uuid)
 
-if __name__ == '__main__':
+def process_only_run():
     with shelve.open('localdb') as db:
-        if 'file_count' not in db:
-            db['file_count'] = 1
-        idx = db['file_count']
-        db['file_count'] += 1
-    
-    # Set up OpenAI API credentials
+            if 'file_count' not in db:
+                db['file_count'] = 1
+            idx = db['file_count']
+            db['file_count'] += 1
+        
+        # Set up OpenAI API credentials
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    
+        
     execute_mutliple(
-        question="What is the current reorder rate and how do I improve it?",
+        question="How can we predict what the next item a user will order will be?",
         csv_files=[
             # './data/churn_modeling/Churn_Modelling.csv'
             # './data/itchurn/IT_customer_churn.csv'
@@ -141,3 +141,7 @@ if __name__ == '__main__':
         ],
         uuid=idx
     )
+
+if __name__ == '__main__':
+    for _ in range(10):
+        process_only_run()
