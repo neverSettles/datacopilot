@@ -23,6 +23,19 @@ def call_openai_api(prompt):
 
     return generated_text
 
+# def call_openai_api(prompt):
+#     response = openai.ChatCompletion.create(
+#         model='gpt-4',
+#         messages=[{"role":"system", "content":str(prompt)}],
+#         max_tokens=100,
+#         temperature=0.7,
+#         n=1,
+#         stop=None,
+#     )
+#     completion = response.choices[0].message.content.strip()
+#     all_but_first = completion.split('\n')[1:]
+#     return '\n'.join(all_but_first)
+
 def execute_python_code(code):
     try:
         exec(code)
@@ -115,13 +128,15 @@ if __name__ == '__main__':
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
     execute_mutliple(
-        question="How should I build recsys for grocery store?",
+        question="What is the current reorder rate and how do I improve it?",
         csv_files=[
+            # './data/churn_modeling/Churn_Modelling.csv'
+            # './data/itchurn/IT_customer_churn.csv'
             './data/grocery/order_products__prior.csv',
             './data/grocery/orders.csv',
-            './data/grocery/aisles.csv',
+            # './data/grocery/aisles.csv',
             './data/grocery/products.csv',
-            './data/grocery/departments.csv',
+            # './data/grocery/departments.csv',
             # './data/grocery/order_products__train.csv'
         ],
         uuid=idx
