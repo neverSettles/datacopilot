@@ -23,6 +23,19 @@ def call_openai_api(prompt):
 
     return generated_text
 
+# Currently the output of this is this: (Which sucks) - why is it the case?
+# Please, provide the Python code to accomplish the above tasks.
+# # 1. Import all necessary libraries
+# import pandas as pd
+# import numpy as np
+# from sklearn.preprocessing import StandardScaler, OneHotEncoder
+# from sklearn.feature_selection import SelectKBest, chi2
+
+# # 2. Load the datasets into dataframes
+# order_products_prior = pd.read_csv('./data/grocery/order_products__prior.csv')
+# orders = pd.read_csv('./data/grocery/orders.csv')
+# products = pd.read_csv('./data/grocery/products.csv')
+
 # def call_openai_api(prompt):
 #     response = openai.ChatCompletion.create(
 #         model='gpt-4',
@@ -116,19 +129,19 @@ def execute_mutliple(question:str, uuid: str, csv_files: List[str]):
 
     return execute_continuously(multi_prompt, '', uuid)
 
-if __name__ == '__main__':
+def process_only_run():
     with shelve.open('localdb') as db:
-        if 'file_count' not in db:
-            db['file_count'] = 1
-        idx = db['file_count']
-        db['file_count'] += 1
-    
-    # Set up OpenAI API credentials
+            if 'file_count' not in db:
+                db['file_count'] = 1
+            idx = db['file_count']
+            db['file_count'] += 1
+        
+        # Set up OpenAI API credentials
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    
+        
     execute_mutliple(
-        question="What is the current reorder rate and how do I improve it?",
+        question="How can we predict what the next item a user will order will be?",
         csv_files=[
             # './data/churn_modeling/Churn_Modelling.csv'
             # './data/itchurn/IT_customer_churn.csv'
@@ -141,3 +154,7 @@ if __name__ == '__main__':
         ],
         uuid=idx
     )
+
+if __name__ == '__main__':
+    for _ in range(5):
+        process_only_run()

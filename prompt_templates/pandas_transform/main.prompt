@@ -1,22 +1,22 @@
-Please write a Python script that utilizes the pandas library to analyze and visualize data from {file_count} CSV files. The purpose of the script is to answer the question:
+Please write a Python script that utilizes the pandas library to perform feature engineering on data from {file_count} CSV files. The purpose of the script is to prepare the data for model training to answer the question:
 "{question}"
 
 {files_prompt}
 
 The script should have the following structure:
 
-1. Import all necessary libraries (including Pandas, Seaborn, and anything else needed).
+1. Import all necessary libraries (including Pandas, Numpy, and Scikit-learn or any other libraries needed for feature engineering).
 2. Load the datasets into dataframes.
-3. Transform the data as needed, ensuring that only the relevant dataframes are used to answer the question.
-4. Create a few clear, colorful, concise, and informative plots that visually represents the information needed to answer the question. To avoid clutter, especially on the x-axis, limit the number of items displayed. The plot should meet the following criteria:
-   - Choose a suitable plot type (such as line, bar, scatter, etc.) based on the data and the question.
-   - Limit the number of items shown on the x-axis to a maximum of 5, selecting the most relevant ones if necessary.
-   - Ensure that the image has enough spacing such that no text gets cutoff.
-   - Include meaningful labels for the x-axis and y-axis, as well as a descriptive title.
-   - Use a legend if the plot includes multiple data series.
-   - Use a color scheme that makes the data easy to read.
-5. Save the plot to a file named 'answer_i.png' (where i is the plot number) in the directory './output/exp{idx}/'. The plot should not be displayed on the screen.
-6. Make sure the code is efficient, readable, and error-free.
-7. Only return text that is python code.
+3. Perform exploratory data analysis to understand the data.
+4. Clean and pre-process the data, this includes handling missing values, duplicates and any errors in the datasets.
+5. Identify and create relevant features that would assist in answering the question. This could involve:
+- Feature extraction: Create new features from the existing ones, like binning a continuous variable or creating interaction terms.
+- Feature scaling: Standardize or normalize numerical features.
+- Encoding categorical variables: Convert categorical variables into a form suitable for machine learning algorithms.
+- Feature selection: Remove irrelevant features if necessary, using methods such as univariate feature selection, recursive feature elimination, or others.
+6. Transform the data as needed, ensuring that only the relevant dataframes and features are used to answer the question.
+7. Save the transformed datasets to files named 'transformed_data_i.csv' (where i is the dataset number) in the directory './output/exp{idx}/'.
+8. Make sure the code is efficient, readable, and error-free.
+9. Only return text that is python code.
 
 Please, provide the Python code to accomplish the above tasks.
