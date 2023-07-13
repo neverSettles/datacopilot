@@ -39,7 +39,7 @@ To the question of "How might we build a recommendation system for Instacart?", 
 
 ![Temporal ordering counts](samples/order_over_time.png "Orders over time")
 
-On the [IT customer churn dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn), the data copilot can generate the following visualizations:
+On the [IT customer churn dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn), the data copilot can generate the following visualizations to the question of "Help me complete an LTV analysis to see what can make customers stay":
 
 ![Churn rate vs Credit score](samples/churn_rate_1.png "Churn rate vs Credit score")
 
