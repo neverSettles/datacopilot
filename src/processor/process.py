@@ -23,18 +23,31 @@ def call_openai_api(prompt):
 
     return generated_text
 
-def call_openai_api(prompt):
-    response = openai.ChatCompletion.create(
-        model='gpt-4',
-        messages=[{"role":"system", "content":str(prompt)}],
-        max_tokens=100,
-        temperature=0.7,
-        n=1,
-        stop=None,
-    )
-    completion = response.choices[0].message.content.strip()
-    all_but_first = completion.split('\n')[1:]
-    return '\n'.join(all_but_first)
+# Currently the output of this is this: (Which sucks) - why is it the case?
+# Please, provide the Python code to accomplish the above tasks.
+# # 1. Import all necessary libraries
+# import pandas as pd
+# import numpy as np
+# from sklearn.preprocessing import StandardScaler, OneHotEncoder
+# from sklearn.feature_selection import SelectKBest, chi2
+
+# # 2. Load the datasets into dataframes
+# order_products_prior = pd.read_csv('./data/grocery/order_products__prior.csv')
+# orders = pd.read_csv('./data/grocery/orders.csv')
+# products = pd.read_csv('./data/grocery/products.csv')
+
+# def call_openai_api(prompt):
+#     response = openai.ChatCompletion.create(
+#         model='gpt-4',
+#         messages=[{"role":"system", "content":str(prompt)}],
+#         max_tokens=100,
+#         temperature=0.7,
+#         n=1,
+#         stop=None,
+#     )
+#     completion = response.choices[0].message.content.strip()
+#     all_but_first = completion.split('\n')[1:]
+#     return '\n'.join(all_but_first)
 
 def execute_python_code(code):
     try:
@@ -143,5 +156,5 @@ def process_only_run():
     )
 
 if __name__ == '__main__':
-    for _ in range(10):
+    for _ in range(5):
         process_only_run()
