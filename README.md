@@ -46,7 +46,16 @@ On the [IT customer churn dataset](https://www.kaggle.com/datasets/blastchar/tel
 
 ![Churn rate vs Credit score](samples/churn_rate_1.png "Churn rate vs Credit score")
 
+![Churn rate vs Tensure](samples/churn_rate_2.png)
+
+![Churn rate vs Credit Card Owner](samples/churn_rate_3.png)
+
+![Churn rate vs Member activity](samples/churn_rate_4.png)
+
+
 ## Actual prompt to GPT:
+The actual prompt to gpt looks like the following (for the instacart basket challenge):
+
 Please write a Python script that utilizes the pandas library to perform feature engineering on data from 3 CSV files. The purpose of the script is to prepare the data for model training to answer the question:
 "How can we predict what the next item a user will order will be?"
 
@@ -90,9 +99,3 @@ The script should have the following structure:
 9. Only return text that is python code.
 
 Please, provide the Python code to accomplish the above tasks.
-
-![Churn rate vs Tensure](samples/churn_rate_2.png)
-
-![Churn rate vs Credit Card Owner](samples/churn_rate_3.png)
-
-![Churn rate vs Member activity](samples/churn_rate_4.png)
